@@ -61,10 +61,18 @@ jobs:
           curl -sSL "https://github.com/bufbuild/buf/releases/download/v1.11.0/buf-Linux-x86_64" -o /usr/local/bin/buf
           chmod +x /usr/local/bin/buf
 
-      - name: Install grpc-gen-openapiV2
+      - name: Install Protobuf Compiler
         run: |
-          wget -O- -q https://github.com/bufbuild/protoc-gen-openapiv2/releases/download/v0.6.0/protoc-gen-openapiv2_0.6.0_linux_x86_64.zip | funzip > /usr/local/bin/protoc-gen-openapiv2
-          chmod +x /usr/local/bin/protoc-gen-openapiv2
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+
+      - name: Install protoc-gen-go and other plugins
+        run: |
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.1
+          go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.2.0
+          go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway@v2.8.0
+          go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-openapiv2@v2.8.0
+          export PATH=$PATH:$(go env GOPATH)/bin
 
       - name: Remove generated files
         run: rm -rf ./gen
@@ -77,3 +85,18 @@ jobs:
 
       - name: Run go mod tidy
         run: go mod tidy
+
+        #
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git config --global init.defaultBranch main
+
+      - name: Commit and push generated files
+        run: |
+          git add .
+          git commit -m "Generate Swagger files"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
