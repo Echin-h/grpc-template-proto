@@ -1,4 +1,4 @@
-module github.com/Echin-h/grpc-temmplate
+module github.com/Echin-h/grpc-template
 
 go 1.22
 

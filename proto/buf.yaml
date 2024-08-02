@@ -1,5 +1,0 @@
-version: v1beta1
-name: local/Echin-h/proto
-deps:
-  - buf.build/googleapis/googleapis
-
