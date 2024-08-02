@@ -39,6 +39,7 @@ jobs:
           against: 'https://github.com/Echin-h/grpc-template.git#branch=main'
           buf_token: ${{ secrets.BUF_TOKEN }}
 
+
   generate:
     runs-on: ubuntu-latest
     permissions:
@@ -54,6 +55,11 @@ jobs:
         uses: actions/setup-go@v4
         with:
           go-version: 'stable'
+
+      - name: Install Buf
+        run: |
+          curl -sSL "https://github.com/bufbuild/buf/releases/download/v1.11.0/buf-Linux-x86_64" -o /usr/local/bin/buf
+          chmod +x /usr/local/bin/buf
 
       - name: Remove generated files
         run: rm -rf ./gen
