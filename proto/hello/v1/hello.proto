@@ -1,13 +1,13 @@
 syntax = "proto3";
 
-package hello.v1;
+package proto.hello.v1;
 
 import "google/api/annotations.proto";
 
 option go_package = "github.com/Echin-h/gRPC-template/gen/proto/hello/v1;helloV1";
 
 
-service Greeter {
+service GreeterService {
   rpc SayHello (SayHelloRequest) returns (SayHelloReply) {
     option (google.api.http) = {
       post: "/v1/hello"
