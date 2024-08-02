@@ -2,11 +2,13 @@ package main
 
 import (
 	"context"
-	"fmt"
-	helloV1 "github.com/Echin-h/grpc-temmplate/gen/proto/hello/v1"
+	helloV1 "github.com/Echin-h/grpc-template/gen/proto/hello/v1"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"log"
 	"net"
+	"net/http"
 )
 
 type Server struct {
@@ -17,34 +19,47 @@ func NewServer() *Server {
 	return &Server{}
 }
 
-func (s *Server) SayHello(ctx context.Context, req *helloV1.HelloRequest) (res *helloV1.HelloReply, err error) {
-	fmt.Println(req.GetName())
-	//return nil, status.Errorf(codes.Unimplemented, "method SayHello not implemented")
-	return &helloV1.HelloReply{
-		Message: "Hello, " + req.GetName(),
-	}, nil
+func (s *Server) SayHello(ctx context.Context, req *helloV1.HelloRequest) (*helloV1.HelloReply, error) {
+	return &helloV1.HelloReply{Message: "Hello " + req.Name}, nil
 }
 
-func (s *Server) SayHelloAgain(ctx context.Context, req *helloV1.HelloRequest) (res *helloV1.HelloReply, err error) {
-	fmt.Println(req.GetName())
-	//return nil, status.Errorf(codes.Unimplemented, "method SayHelloAgain not implemented")
-	return &helloV1.HelloReply{
-		Message: "Hello again, " + req.GetName(),
-	}, nil
+func (s *Server) SayHelloAgain(ctx context.Context, req *helloV1.HelloRequest) (*helloV1.HelloReply, error) {
+	return &helloV1.HelloReply{Message: "Hello again " + req.Name}, nil
 }
 
 func main() {
-	l, err := net.Listen("tcp", ":8888")
+	l, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		panic(err)
 	}
 
-	// create a grpc server object
 	s := grpc.NewServer()
 
-	// attach the greeter service to the server
 	helloV1.RegisterGreeterServer(s, &Server{})
 
-	// Serve grpc Server
-	log.Fatal(s.Serve(l))
+	log.Println("Server started on port 8080")
+	go func() {
+		log.Fatalln(s.Serve(l))
+	}()
+
+	conn, err := grpc.NewClient("localhost:8080", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	if err != nil {
+		panic(err)
+	}
+
+	gwmux := runtime.NewServeMux()
+	// register client
+	err = helloV1.RegisterGreeterHandler(context.Background(), gwmux, conn)
+	if err != nil {
+		panic(err)
+	}
+
+	gwServer := &http.Server{
+		Addr:    ":8090",
+		Handler: gwmux,
+	}
+
+	log.Println("Gateway started on port 8090")
+	log.Fatalln(gwServer.ListenAndServe())
+
 }

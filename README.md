@@ -10,3 +10,8 @@
 ### 4. implement the swagger openapi
 
 ### 5. implement the github action
+
+* grpc
+* grpc-getaway
+* grpc-gen-swaggerr
+* buf

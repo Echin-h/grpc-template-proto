@@ -9,5 +9,7 @@ plugins:
   - name: grpc-gateway
     out: gen/
     opt: paths=source_relative
+  - name: openapiv2
+    out: gen/openapi
 
 # buf generate
