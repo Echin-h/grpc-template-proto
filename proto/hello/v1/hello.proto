@@ -8,14 +8,14 @@ option go_package = "github.com/Echin-h/gRPC-template/gen/proto/hello/v1;helloV1
 
 
 service Greeter {
-  rpc SayHello (HelloRequest) returns (HelloReply) {
+  rpc SayHello (SayHelloRequest) returns (SayHelloReply) {
     option (google.api.http) = {
       post: "/v1/hello"
       body: "*"
     };
   }
 
-  rpc SayHelloAgain (HelloRequest) returns (HelloReply) {
+  rpc SayHelloAgain (SayHelloAgainRequest) returns (SayHelloAgainReply) {
     option (google.api.http) = {
       post: "/v1/hello/again"
       body: "*"
@@ -23,12 +23,16 @@ service Greeter {
   }
 }
 
-// The request message containing the user's name.
-message HelloRequest {
+message SayHelloRequest {
   string name = 1;
 }
+message SayHelloReply {
+  string message = 1;
+}
 
-// The response message containing the greetings
-message HelloReply {
+message SayHelloAgainRequest {
+  string name = 1;
+}
+message SayHelloAgainReply {
   string message = 1;
 }
