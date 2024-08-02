@@ -61,6 +61,11 @@ jobs:
           curl -sSL "https://github.com/bufbuild/buf/releases/download/v1.11.0/buf-Linux-x86_64" -o /usr/local/bin/buf
           chmod +x /usr/local/bin/buf
 
+      - name: Install grpc-gen-openapiV2
+        run: |
+          wget -O- -q https://github.com/bufbuild/protoc-gen-openapiv2/releases/download/v0.6.0/protoc-gen-openapiv2_0.6.0_linux_x86_64.zip | funzip > /usr/local/bin/protoc-gen-openapiv2
+          chmod +x /usr/local/bin/protoc-gen-openapiv2
+
       - name: Remove generated files
         run: rm -rf ./gen
 
