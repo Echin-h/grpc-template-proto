@@ -21,7 +21,16 @@ service GreeterService {
       body: "*"
     };
   }
+
+  rpc SayHelloThirdly (SayHelloThirdlyRequest) returns (SayHelloThirdlyResponse) {
+    option (google.api.http) = {
+      post: "/v1/hello/thirdly"
+      body: "*"
+    };
+  }
 }
+
+
 
 message SayHelloRequest {
   string name = 1;
@@ -34,5 +43,12 @@ message SayHelloAgainRequest {
   string name = 1;
 }
 message SayHelloAgainResponse{
+  string message = 1;
+}
+
+message SayHelloThirdlyRequest {
+  string name = 1;
+}
+message SayHelloThirdlyResponse{
   string message = 1;
 }
