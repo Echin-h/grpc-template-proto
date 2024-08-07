@@ -1,4 +1,4 @@
 version: v1
-name: buf.build/echin/grpc-template
+name: buf.build/echin/grpc-template-proto
 deps:
   - buf.build/googleapis/googleapis
