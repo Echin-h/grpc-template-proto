@@ -4,7 +4,7 @@ package proto.hello.v1;
 
 import "google/api/annotations.proto";
 
-option go_package = "github.com/Echin-h/gRPC-template/gen/proto/hello/v1;helloV1";
+option go_package = "github.com/Echin-h/gRPC-template-proto/gen/proto/hello/v1;helloV1";
 
 
 service GreeterService {
