@@ -1,4 +1,4 @@
-module grpc-template-proto
+module github.com/Echin-h/gRPC-template-proto
 
 go 1.22
 
